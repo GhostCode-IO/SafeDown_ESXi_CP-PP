@@ -124,11 +124,13 @@ function Initiate-Downing-Process
 
         if ($Down_Host -eq "true")
         {
+                sleep($Time_Host_Down)
                 Write-Host "Powering Down Vmware Host...";
                 Stop-VMHost 10.1.0.4 -Force -Reason "Power Failure Detected by STORM" -RunAsync;
         }
         if ($Down_Self -eq "true")
         {
+                sleep($Time_Self_Down);
                 Write-Host "Powering Down Self...";
                 shutdown now;
         }
