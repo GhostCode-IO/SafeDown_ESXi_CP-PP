@@ -35,7 +35,7 @@ SafeDown provides several user-configurable settings within the primary PowerShe
   Count_Failure_Check   :   Total number of times to re-check power status when a failure has been detected.  If power has not been restored by this number of checks, we will proceed with shutting everything down (per configuration).
   Time_Self_Down        :   Delay between suspending / stopping / keeping last VM and when self (system running SafeDown) is shutdown
   Time_Host_Down        :   Delay between suspending / stopping / keeping last VM and when host (ESXi Server) is shutdown
-  Battery_Limit         :   Catch for low battery when monitoring power status after failure has been detected.  If this value of battery capacity percentage is reached, shutdown operations will start immediately
+  Battery_Limit         :   Catch for low battery when monitoring power status after failure has been detected.  If this value of battery capacity percentage is reached, shutdown operations will start immediately.  This is not currently implemented as CyberPower's reports on battery capacity percentage are unreliable.
 
 CONFIGURATION (safedown.config):
   Configuration of this config file should be pretty easy to understand.  Simply enter the name of the VM you want to configure followed by the action (suspend, stop, or keep) - these should be on the same line but separated by a :
