@@ -29,7 +29,7 @@ $global:UPS_Battery = $null;
 
 function Read-Config-File
 {
-        $Content_Config_File = Get-Content /etc/esxi_pp_controller2.config;
+        $Content_Config_File = Get-Content /etc/safedown.config;
         foreach ($Line in $Content_Config_File)
         {
                 $VM_Config = $Line -split ":";
