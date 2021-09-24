@@ -1,0 +1,47 @@
+Safedown is designed to assist system adminstrators in safely shutting down VMware ESXi (vSphere) environments in the event of a power outage.
+Safedown works with CyberPower UPS devices that are connect directly to the monitoring server via USB.
+
+PRE-REQS:
+1) Linux OS
+2) PowerShell for Linux
+2.5) PowerCLI
+3) CyberPower Power Panel - Home Edition for Linux
+4) Paid License of ESXi (vSphere) - Recommend spending the $200/yr on VMUG subscription...  You will get a lot more than just the licensing you need.
+
+INSTALLATION:
+Once you have the pre-reqs met on your system, you can simply download safedown.ps1 and save it to any location on your filesystem.
+It is recommended that you also download the sample safedown.conf as this will provide you a template on creating the safedown.conf file.
+  NOTE:  safedown.conf should be stored within /etc/
+
+It is also recommended that you create a service for pwsh -Command safedown.ps1 to allow this application to run in the background and automatically.
+  You can alternatively run safedown.ps1 via CRON
+
+CONFIGURATION (safedown.ps1):
+SafeDown provides several user-configurable settings within the primary PowerShell script, each of these setting are represented by variables.
+  ESXi_Server   :   IP Address or Server Name of ESXi Server you are working with
+  ESXi_Protocol :   Protocol you wish to use to connect to your ESXi Server ("http" or "https") - Recommend using https
+  ESXi_User     :   Username you wish to login to your ESXi Server with
+  ESXi_Password :   Password for user you wish to loging to your ESXi Server with
+  
+  Default_Down_Action   :   Default action for VMs when an outage is detected.  This can either be "suspend" or "stop"
+                              "suspend" will suspend any unconfigured machines
+                              "stop" will power down any unconfigured machines
+  
+  Down_Host   :   Should the VMware ESXi Server be powered down itself?  Either "true" or "false"
+  Down_Self   :   Should the system running SafeDown be shutdown?  Either "true" or "false"
+  
+  Time_Routine_Check    :   Delay between checking power status of UPS when everything seems normal (in seconds)
+  Time_Failure_Check    :   Delay between checking power status of UPS when a power failure has been detected (in seconds)
+  Count_Failure_Check   :   Total number of times to re-check power status when a failure has been detected.  If power has not been restored by this number of checks, we will proceed with shutting everything down (per configuration).
+  Time_Self_Down        :   Delay between suspending / stopping / keeping last VM and when self (system running SafeDown) is shutdown
+  Time_Host_Down        :   Delay between suspending / stopping / keeping last VM and when host (ESXi Server) is shutdown
+  Battery_Limit         :   Catch for low battery when monitoring power status after failure has been detected.  If this value of battery capacity percentage is reached, shutdown operations will start immediately
+
+CONFIGURATION (safedown.config):
+  Configuration of this config file should be pretty easy to understand.  Simply enter the name of the VM you want to configure followed by the action (suspend, stop, or keep) - these should be on the same line but separated by a :
+  EXAMPLE:
+            machine1:suspend
+            machine2:stop
+            machine3:suspend
+            machine4:keep
+   Machine's that are listed as "keep" will neither be suspended or stopped and will reamin running until host has stopped.
